@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://iam-arturo.github.io/scatto/sitemap.xml
