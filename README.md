@@ -25,9 +25,9 @@ contact.html                Inquiry form (Formspree) + FAQ
 assets/
   css/styles.css            All styles. Colors and fonts are tokens at the top (:root)
   js/main.js                Mobile menu, product gallery, form pre-fill and submit
-  images/brand/             logo.svg, logo-white.svg, favicon.svg  (placeholders)
-  images/products/<slug>/   Web-sized kit photos
-  scatto_golf_kit.png       Original high-resolution photo (not used by the pages)
+  images/brand/             logo.png (header), logo-full-white.png (footer), favicon.png, apple-touch-icon.png
+  images/site/              Brand and gift banners, social-sharing image (og-image.jpg)
+  images/products/<slug>/   Web-sized kit photos, each in two sizes (e.g. kit-1200.jpg and kit-600.jpg)
 ```
 
 The header and footer are copied into every page, so a nav or footer change has to be made in all 7 HTML files. Search for `Site header` / `Site footer`.
@@ -36,18 +36,19 @@ The header and footer are copied into every page, so a nav or footer change has 
 
 Search the project for `TODO` to find each spot:
 
-- [ ] **Logo**: replace `assets/images/brand/logo.svg` (navy, used in the header), `logo-white.svg` (footer) and `favicon.svg`. Keep the same filenames and nothing else needs to change.
+- [ ] **Logo files**: the logo, favicon and sharing image were cut out of the client's brand banner as PNGs. Ask the client for the original vector logo (SVG or AI) and re-export them, keeping the same filenames. The header logo is a compact version (squirrel and wordmark, no tagline) so it stays readable at small sizes; check that the client is happy with it.
 - [ ] **Contact form**: create a form at [formspree.io](https://formspree.io), then replace `YOUR_FORM_ID` in `contact.html`. Until then, the form shows a "not connected yet" message.
 - [ ] **Domain**: replace `https://iam-arturo.github.io/scatto` with the real domain in all HTML files, `robots.txt` and `sitemap.xml`. It's used for canonical URLs, social sharing previews and structured data. In `404.html`, also change the `/scatto/` paths back to `/`.
 - [ ] **Search engines**: remove the `<meta name="robots" content="noindex, nofollow">` lines marked `PREVIEW ONLY` from the 5 public pages. (Leave the ones in `404.html` and `products/_template.html`.)
 - [ ] **Price**: the site shows **$89** as a placeholder. Update it in `index.html`, `shop.html` and `products/classic-navy-kit.html`, including the `"price"` in the page's JSON-LD block.
-- [ ] **Specs**: add the kit's dimensions, weight and materials to the Details table on the product page.
+- [ ] **Specs**: add the kit's dimensions and weight to the Details table on the product page.
 - [ ] **Copy**: the About story, product texts and FAQ are drafts for the client to review. The return-policy answer in the FAQ is intentionally generic.
 
 ## Add a new kit
 
-1. Put its photos in `assets/images/products/<kit-slug>/`. Resize large photos first, for example:
-   `sips -s format jpeg -s formatOptions 82 -Z 1600 photo.png --out assets/images/products/<kit-slug>/main.jpg`
+1. Put its photos in `assets/images/products/<kit-slug>/`. Square photos work best. Export each one at 1200px and 600px, for example:
+   `sips -s format jpeg -s formatOptions 78 -Z 1200 photo.jpg --out assets/images/products/<kit-slug>/main-1200.jpg`
+   `sips -s format jpeg -s formatOptions 78 -Z 600 photo.jpg --out assets/images/products/<kit-slug>/main-600.jpg`
 2. Copy `products/_template.html` to `products/<kit-slug>.html` and follow the checklist comment at the top of the file.
 3. Add a card to `shop.html` (copy the existing `<article class="card">`).
 4. Add an `<option value="<kit-slug>">` to the **Kit** select in `contact.html`.
