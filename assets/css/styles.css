@@ -1,7 +1,7 @@
 /* ==========================================================================
    Scatto — site styles
    1. Tokens  2. Base  3. Layout  4. Header/Nav  5. Buttons  6. Sections
-   7. Cards  8. Product  9. Forms  10. FAQ  11. Footer  12. Utilities
+   7. Cards  8. Product  9. Forms  10. FAQ  11. Footer  12. Utilities  13. Motion
    ========================================================================== */
 
 /* 1. Tokens --------------------------------------------------------------- */
@@ -464,7 +464,42 @@ a:hover { color: var(--green); }
 .center { text-align: center; }
 .mt-lg { margin-top: clamp(32px, 5vw, 56px); }
 
+/* 13. Motion ----------------------------------------------------------------- */
+/* The client's photos carry their own text, so nothing here crops or pans them. */
+
+/* Scroll reveal: main.js adds .reveal and a --reveal-delay, then .is-visible once in view */
+.tile-grid img, .wide-stack img, .rounded-img, .photo-band img {
+  transition:
+    opacity 0.9s ease var(--reveal-delay, 0s),
+    translate 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0s),
+    scale 0.4s ease,
+    box-shadow 0.4s ease;
+}
+.reveal:not(.is-visible) { opacity: 0; translate: 0 28px; }
+@media print { .reveal { opacity: 1; translate: none; } }
+
+/* Hover: marketing tiles lift slightly */
+@media (hover: hover) {
+  .tile-grid img:hover, .wide-stack img:hover, .rounded-img:hover { scale: 1.02; box-shadow: var(--shadow); }
+}
+
+/* The kit photo floats gently (its white background hides the movement at the edges) */
+.float { animation: float 7s ease-in-out infinite; }
+@keyframes float { 50% { translate: 0 -10px; } }
+
+/* Product gallery: magnify on hover; main.js moves the zoom point with the cursor */
+@media (hover: hover) {
+  .gallery-main { cursor: zoom-in; }
+  .gallery-main img { transition: scale 0.3s ease; }
+  .gallery-main:hover img { scale: 1.6; }
+}
+
+/* Shop cards: photo zooms in on hover */
+.card-media { overflow: hidden; }
+.card-media img { transition: scale 0.5s ease; }
+.card:hover .card-media img { scale: 1.04; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after { transition: none !important; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
 }

@@ -2,6 +2,8 @@
 (function () {
   "use strict";
 
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   // Mobile nav toggle
   var toggle = document.querySelector(".nav-toggle");
   var nav = document.getElementById("site-nav");
@@ -24,12 +26,51 @@
   var mainImg = document.querySelector(".gallery-main img");
   document.querySelectorAll(".gallery-thumbs button").forEach(function (btn, _, all) {
     btn.addEventListener("click", function () {
+      if (!reduceMotion) {
+        mainImg.addEventListener("load", function () {
+          mainImg.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 350, easing: "ease-out" });
+        }, { once: true });
+      }
       mainImg.src = btn.dataset.src;
       mainImg.removeAttribute("srcset");
       mainImg.alt = btn.querySelector("img").alt;
       all.forEach(function (b) { b.setAttribute("aria-current", String(b === btn)); });
     });
   });
+
+  // Product gallery: hover magnifies the main image around the cursor
+  var galleryMain = document.querySelector(".gallery-main");
+  if (galleryMain && window.matchMedia("(hover: hover)").matches) {
+    galleryMain.addEventListener("mouseenter", function () {
+      // Drop srcset so the zoom uses the 1200px file, not the 600px one
+      mainImg.removeAttribute("srcset");
+    });
+    galleryMain.addEventListener("mousemove", function (e) {
+      var box = galleryMain.getBoundingClientRect();
+      var x = ((e.clientX - box.left) / box.width) * 100;
+      var y = ((e.clientY - box.top) / box.height) * 100;
+      mainImg.style.transformOrigin = x + "% " + y + "%";
+    });
+  }
+
+  // Photos rise into view as they scroll in. Only JS hides them, so they always show without it.
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    var revealer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        revealer.unobserve(entry.target);
+      });
+    }, { rootMargin: "0px 0px -10% 0px" });
+
+    document.querySelectorAll(".tile-grid img, .wide-stack img, .rounded-img, .photo-band img").forEach(function (img) {
+      // Side-by-side tiles arrive one after the other
+      var i = Array.prototype.indexOf.call(img.parentNode.children, img);
+      img.style.setProperty("--reveal-delay", (i % 2) * 0.12 + "s");
+      img.classList.add("reveal");
+      revealer.observe(img);
+    });
+  }
 
   // Contact form
   var form = document.querySelector(".js-inquiry-form");
