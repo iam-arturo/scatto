@@ -109,6 +109,39 @@ a:hover { color: var(--green); }
 
 .rounded-img { border-radius: var(--radius-lg); }
 
+/* Video with a corner play/pause/replay button (main.js). The background matches the video's backdrop. */
+.video-card { position: relative; overflow: hidden; background: #e4e0da; }
+.video-card video { display: block; width: 100%; height: auto; aspect-ratio: 1; }
+.video-toggle {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(6, 38, 63, 0.72);
+  color: var(--white);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.video-toggle:hover { background: var(--navy-deep); }
+.video-toggle[hidden] { display: none; }
+.video-toggle::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background: currentColor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
+.video-toggle[data-state="playing"] { --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 2h3v12h-3zM9.5 2h3v12h-3z'/%3E%3C/svg%3E"); }
+.video-toggle[data-state="paused"] { --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 2v12l10-6z'/%3E%3C/svg%3E"); }
+.video-toggle[data-state="ended"] { --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8a5 5 0 1 0 1.5-3.5'/%3E%3Cpath d='M4.5 1.5v3h3'/%3E%3C/svg%3E"); }
+
 /* 4. Header / Nav ------------------------------------------------------------ */
 .skip-link {
   position: absolute;
@@ -315,12 +348,19 @@ a:hover { color: var(--green); }
 @media (min-width: 960px) { .product { grid-template-columns: 1.1fr 1fr; align-items: start; } }
 
 .gallery-main {
+  position: relative;
   aspect-ratio: 1;
   border-radius: var(--radius-lg);
   background: var(--paper);
   overflow: hidden;
 }
 .gallery-main img { width: 100%; height: 100%; object-fit: cover; }
+/* The video thumbnail adds .is-video, which swaps the photo for the video */
+.gallery-main video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.gallery-main.is-video { background: #e4e0da; }
+.gallery-main.is-video img,
+.gallery-main:not(.is-video) video,
+.gallery-main:not(.is-video) .video-toggle { display: none; }
 .gallery-thumbs {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
@@ -340,7 +380,22 @@ a:hover { color: var(--green); }
   cursor: pointer;
 }
 .gallery-thumbs button[aria-current="true"] { border-color: var(--navy); }
+/* Wider screens keep every thumbnail on one row, shrinking them to fit */
+@media (min-width: 600px) {
+  .gallery-thumbs { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(0, 88px); }
+}
 .gallery-thumbs img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.gallery-thumbs .thumb-video { position: relative; }
+.thumb-video::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 26px;
+  height: 26px;
+  margin: auto;
+  border-radius: 50%;
+  background: rgba(6, 38, 63, 0.72) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='white' d='M4 2v12l10-6z'/%3E%3C/svg%3E") 58% 50% / 10px no-repeat;
+}
 
 @media (min-width: 960px) { .gallery { position: sticky; top: calc(var(--header-h) + 24px); } }
 .product-info h1 { font-size: clamp(2.2rem, 4vw, 3.2rem); margin-bottom: 0.2em; }
@@ -490,6 +545,7 @@ a:hover { color: var(--green); }
 /* Product gallery: magnify on hover; main.js moves the zoom point with the cursor */
 @media (hover: hover) {
   .gallery-main { cursor: zoom-in; }
+  .gallery-main.is-video { cursor: auto; }
   .gallery-main img { transition: scale 0.3s ease; }
   .gallery-main:hover img { scale: 1.6; }
 }

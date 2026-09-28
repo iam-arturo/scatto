@@ -73,7 +73,11 @@
 
     <section class="section section--paper" aria-labelledby="inside-title">
       <div class="container split">
-        <div><img class="rounded-img" src="assets/images/products/classic-navy-kit/whats-inside-1200.jpg" srcset="assets/images/products/classic-navy-kit/whats-inside-600.jpg 600w, assets/images/products/classic-navy-kit/whats-inside-1200.jpg 1200w" sizes="(min-width: 900px) 560px, 100vw" width="1200" height="1200" loading="lazy" alt="Golf accessory kit: glove holder, 5 golf tees, divot tool and 2 magnetic hat-clip ball markers, each in its own slot in the open Scatto case"></div>
+        <!-- Plays once when scrolled into view (main.js). Without JS or with reduced motion, it shows the open case. -->
+        <div class="video-card rounded-img">
+          <video src="assets/video/classic-navy-kit/opening.mp4" poster="assets/video/classic-navy-kit/opening-end.jpg" data-start-poster="assets/video/classic-navy-kit/opening-start.jpg" data-play-in-view width="960" height="960" muted playsinline preload="none" aria-label="The navy Scatto case unzips and opens to show 5 engraved golf tees, 2 magnetic hat-clip ball markers, a divot tool and a glove holder, each in its own slot"></video>
+          <button class="video-toggle" type="button" hidden></button>
+        </div>
         <div>
           <span class="eyebrow">What's inside</span>
           <h2 id="inside-title">Small things that make a big difference</h2>
