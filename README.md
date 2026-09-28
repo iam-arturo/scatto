@@ -28,6 +28,7 @@ assets/
   images/brand/             logo.png (header), logo-full-white.png (footer), favicon.png, apple-touch-icon.png
   images/site/              Brand and gift banners, social-sharing image (og-image.jpg)
   images/products/<slug>/   Web-sized kit photos, each in two sizes (e.g. kit-1200.jpg and kit-600.jpg)
+  video/<slug>/             Kit video (opening.mp4) with its start frame, end frame and gallery thumbnail
 ```
 
 The header and footer are copied into every page, so a nav or footer change has to be made in all 7 HTML files. Search for `Site header` / `Site footer`.
@@ -53,6 +54,23 @@ Search the project for `TODO` to find each spot:
 3. Add a card to `shop.html` (copy the existing `<article class="card">`).
 4. Add an `<option value="<kit-slug>">` to the **Kit** select in `contact.html`.
 5. Add the URL to `sitemap.xml`.
+
+## Kit video
+
+The case-opening video appears in two places: the "What's inside" section of the home page, where it plays once when scrolled into view, and the product gallery, as the second thumbnail. It has no sound and a corner button to pause, play or replay it. Visitors who have reduced motion turned on, or no JavaScript, see the final frame (the open case) as a still.
+
+The original was 1280×720. Both spots are square, so the export crops its sides and extends the plain background at the top and bottom. To replace it, export the new video and its stills with the same filenames:
+
+```sh
+SRC=~/Downloads/new-video.mp4; OUT=assets/video/classic-navy-kit
+VF="crop=1040:720:120:0,split[a][b];[a]pad=1040:1040:0:160,fillborders=top=160:bottom=160:mode=smear,gblur=sigma=24[bg];[bg][b]overlay=0:160,scale=960:960:flags=lanczos"
+ffmpeg -i "$SRC" -filter_complex "$VF" -an -c:v libx264 -preset slow -crf 25 -pix_fmt yuv420p -movflags +faststart $OUT/opening.mp4
+ffmpeg -ss 0 -i "$SRC" -filter_complex "$VF" -frames:v 1 -q:v 4 $OUT/opening-start.jpg
+ffmpeg -sseof -0.05 -i "$SRC" -filter_complex "$VF" -frames:v 1 -q:v 4 $OUT/opening-end.jpg
+ffmpeg -ss 4.5 -i "$SRC" -filter_complex "$VF,crop=720:720:120:120,scale=300:300" -frames:v 1 -q:v 4 $OUT/opening-thumb.jpg
+```
+
+The crop assumes the product stays in the middle 1040px of a 1280×720 frame; check the stills before publishing. Install ffmpeg with `brew install ffmpeg`.
 
 ## Contact form pre-fill
 
