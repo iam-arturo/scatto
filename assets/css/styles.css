@@ -1,7 +1,7 @@
 /* ==========================================================================
    Scatto — site styles
    1. Tokens  2. Base  3. Layout  4. Header/Nav  5. Buttons  6. Sections
-   7. Cards  8. Product  9. Forms  10. FAQ  11. Footer  12. Utilities  13. Motion
+   7. Cards  8. Product  9. Contact  10. FAQ  11. Footer  12. Utilities  13. Motion
    ========================================================================== */
 
 /* 1. Tokens --------------------------------------------------------------- */
@@ -258,7 +258,6 @@ a:hover { color: var(--green); }
 .btn--light { background: transparent; border-color: var(--white); color: var(--white); }
 .btn--light:hover { background: var(--white); border-color: var(--white); color: var(--navy-deep); }
 .btn-small { min-height: 42px; padding: 8px 20px; font-size: 0.76rem; }
-.btn[disabled] { opacity: 0.6; cursor: progress; }
 
 .btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
 
@@ -424,40 +423,13 @@ a:hover { color: var(--green); }
 .specs th, .specs td { padding: 11px 0; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 .specs th { width: 36%; padding-right: 16px; font-weight: 600; color: var(--muted); }
 
-/* 9. Forms -------------------------------------------------------------------- */
+/* 9. Contact -------------------------------------------------------------------- */
 .contact-layout { display: grid; gap: clamp(40px, 6vw, 72px); }
 @media (min-width: 960px) { .contact-layout { grid-template-columns: 1.2fr 1fr; align-items: start; } }
 
-.form { display: grid; gap: 18px; }
-.form-row { display: grid; gap: 18px; }
-@media (min-width: 600px) { .form-row { grid-template-columns: 1fr 1fr; } }
-
-.field { display: grid; gap: 6px; }
-.field label { font-size: 0.9rem; font-weight: 700; color: var(--navy); }
-.field .optional { font-weight: 400; color: var(--muted); }
-.field input,
-.field select,
-.field textarea {
-  width: 100%;
-  min-height: 48px;
-  padding: 12px 14px;
-  border: 1px solid #c9d0d6;
-  border-radius: var(--radius);
-  background: var(--white);
-  color: var(--ink);
-  font: inherit;
-}
-.field textarea { min-height: 150px; resize: vertical; }
-.field input:focus,
-.field select:focus,
-.field textarea:focus { outline: none; border-color: var(--navy); box-shadow: 0 0 0 3px rgba(10, 56, 90, 0.16); }
-
-.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; } /* spam honeypot */
-
-.form-status { margin: 0; padding: 0; border-radius: var(--radius); font-size: 0.95rem; }
-.form-status:not(:empty) { padding: 14px 16px; }
-.form-status.is-success { background: var(--green-soft); color: var(--success); }
-.form-status.is-error { background: #f7e7e4; color: var(--error); }
+.contact-email h2 { font-size: 1.6rem; }
+.contact-email p { max-width: 52ch; color: var(--muted); }
+.contact-email p a { font-weight: 700; overflow-wrap: anywhere; }
 
 .contact-aside { padding: 32px; border-radius: var(--radius-lg); background: var(--paper); }
 .contact-aside h2 { font-size: 1.6rem; }
